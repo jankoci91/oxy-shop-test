@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+
+  app:
+    build:
+      context: docker/app
+      args:
+        - DEBUG_IP=172.18.0.1
+    ports:
+      - '127.0.0.1:8080:80'
+    volumes:
+      - './:/var/www/'
+      - './docker/app/data/.bash_history:/root/.bash_history'
+
+  db:
+    image: mariadb:10.5.8
+    environment:
+      MYSQL_DATABASE: app
+      MYSQL_ROOT_PASSWORD: docker
+    volumes:
+      - './docker/db/data/mysql/:/var/lib/mysql/'
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - '127.0.0.1:8081:8080'

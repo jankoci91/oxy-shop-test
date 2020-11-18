@@ -1,0 +1,5 @@
+resources:
+    App\Entity\User:
+        attributes:
+            input: App\Api\Dto\UserInput
+            output: App\Api\Dto\UserOutput
