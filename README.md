@@ -2,32 +2,36 @@
 
 ## Setup
 
-- V rootu projektu:
+- `touch docker/cli/data/.bash_history`
 
-    - `touch docker/app/data/.bash_history`
+- `docker-compose run --rm cli`
 
-    - `docker-compose up`
+- `cd /srv/api && composer install -n && bin/console doctrine:migrations:migrate -n`
 
-- V app kontejneru:
+- `cd /srv/client && composer install -n && exit`
 
-    - `composer install`
+## Run
 
-    - `bin/console doctrine:migrations:migrate`
+- `docker-compose up -d client`
 
-## API Doc
+- http://localhost:8080
 
-admin@local.host:docker
+## Dev
 
-http://localhost:8080/docs
+### PHP CLI
 
-- Použijte http://localhost:8080/docs#operations-Token-postCredentialsItem pro **získání tokenu**.
+- `docker-compose run --rm cli`
 
-- Ve tvaru _Bearer TOKEN_ použijte token po kliknutí na **authorize**.
+### Adminer
 
-Není to mnou vytvořený HTML formulář s jQuery (tam někde jsem s JS skončil), ale umí JWT a není to hnusný.
+Password: docker
 
-## Adminer
+- `docker-compose up adminer`
 
-root:docker
+- http://localhost:8082/?server=db&username=root
 
-http://localhost:8081
+### API
+
+- `docker-compose up api`
+
+- http://localhost:8081/docs

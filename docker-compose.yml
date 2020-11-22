@@ -2,26 +2,52 @@ version: '2'
 
 services:
 
-  app:
+  client:
     build:
-      context: docker/app
+      context: docker/client
       args:
         - DEBUG_IP=172.18.0.1
     ports:
       - '127.0.0.1:8080:80'
     volumes:
-      - './:/var/www/'
-      - './docker/app/data/.bash_history:/root/.bash_history'
+      - './client/:/var/www/'
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: docker/api
+      args:
+        - DEBUG_IP=172.18.0.1
+    ports:
+      - '127.0.0.1:8081:80'
+    volumes:
+      - './api/:/var/www/'
+      - './docker/api/jwt/:/var/www/config/jwt/'
+    depends_on:
+      - db
 
   db:
     image: mariadb:10.5.8
     environment:
-      MYSQL_DATABASE: app
+      MYSQL_DATABASE: api
       MYSQL_ROOT_PASSWORD: docker
     volumes:
       - './docker/db/data/mysql/:/var/lib/mysql/'
 
+  cli:
+    build:
+      context: docker/cli
+    command: bash
+    volumes:
+      - './:/srv/'
+      - './docker/cli/data/.bash_history:/root/.bash_history'
+    depends_on:
+      - db
+
   adminer:
     image: adminer:latest
     ports:
-      - '127.0.0.1:8081:8080'
+      - '127.0.0.1:8082:8080'
+    depends_on:
+      - db

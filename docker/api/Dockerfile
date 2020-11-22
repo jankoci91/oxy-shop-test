@@ -5,9 +5,6 @@ ARG DEBUG_IP
 ENV TZ Europe/Prague
 
 RUN apt-get -y update && apt-get -y upgrade && apt-get -y install \
-    wget \
-    git \
-    zip \
     libicu-dev
 RUN apt-get -y clean && apt-get -y autoremove
 
@@ -20,8 +17,6 @@ RUN echo "date.timezone = Europe/Prague" >> /usr/local/etc/php/php.ini
 RUN ln -s ../mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load
 
 COPY default.conf /etc/apache2/sites-available/000-default.conf
-
-RUN wget https://getcomposer.org/installer -O - | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /usr/local/etc/php/conf.d
 RUN pecl install xdebug
