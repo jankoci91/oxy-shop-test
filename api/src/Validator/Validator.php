@@ -8,6 +8,9 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\Validator\Constraints\GroupSequence;
 use Symfony\Component\Validator\Validator\ValidatorInterface as SymfonyValidatorInterface;
 
+/**
+ * @see \ApiPlatform\Core\Bridge\Symfony\Validator\Validator
+ */
 class Validator implements ValidatorInterface
 {
     private SymfonyValidatorInterface $validator;
