@@ -51,6 +51,6 @@ class UserInputTransformer implements DataTransformerInterface
 
     public function supportsTransformation($data, string $to, array $context = []): bool
     {
-        return $to === UserEntity::class && !$data instanceof UserEntity && null !== ($context['input']['class'] ?? null);
+        return $to === UserEntity::class && ! $data instanceof UserEntity && null !== ($context['input']['class'] ?? null);
     }
 }

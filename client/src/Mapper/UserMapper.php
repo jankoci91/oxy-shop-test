@@ -9,31 +9,31 @@ class UserMapper
     public function dtoToArray(User $dto): array
     {
         return [
-            'id' => $dto->id,
-            'name' => $dto->name,
-            'email' => $dto->email,
-            'password' => $dto->password,
-            'roles' => $dto->roles,
+            User::ID => $dto->id,
+            User::NAME => $dto->name,
+            User::EMAIL => $dto->email,
+            User::PASSWORD => $dto->password,
+            User::ROLES => $dto->roles,
         ];
     }
 
-    public function arrayToDto(array $array): User
+    public function arrayToDto(array $array, User $dto = null): User
     {
-        $dto = new User();
-        if (isset($array['id'])) {
-            $dto->id = $array['id'];
+        $dto = $dto ?? new User();
+        if (isset($array[User::ID])) {
+            $dto->id = $array[User::ID];
         }
-        if (isset($array['name'])) {
-            $dto->name = $array['name'];
+        if (isset($array[User::NAME])) {
+            $dto->name = $array[User::NAME];
         }
-        if (isset($array['email'])) {
-            $dto->email = $array['email'];
+        if (isset($array[User::EMAIL])) {
+            $dto->email = $array[User::EMAIL];
         }
-        if (isset($array['password'])) {
-            $dto->password = $array['password'];
+        if (isset($array[User::PASSWORD])) {
+            $dto->password = $array[User::PASSWORD];
         }
-        if (isset($array['roles'])) {
-            $dto->roles = $array['roles'];
+        if (isset($array[User::ROLES])) {
+            $dto->roles = $array[User::ROLES];
         }
         return $dto;
     }

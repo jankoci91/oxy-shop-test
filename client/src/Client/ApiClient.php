@@ -42,7 +42,7 @@ class ApiClient
         ]];
         try {
             $authorized = $this->client->request('GET', $this->host, $options)->getStatusCode() === 200;
-            if (!$authorized) {
+            if (! $authorized) {
                 $this->setToken('');
                 $this->setEmail('');
             }
@@ -120,16 +120,18 @@ class ApiClient
         try {
             $response = $this->client->request($method, $url, $options);
             $statusCode = $response->getStatusCode();
-            if ($statusCode === 200 || $statusCode === 201) {
-                return Response::data($response->getContent());
+            switch ($statusCode) {
+                case 200:
+                case 201:
+                case 204:
+                    return Response::data($response->getContent());
+                case 400:
+                    return Response::validation($response->getContent(false));
+                case 404:
+                    return Response::noData();
+                default:
+                    throw new ClientException("$method $url failed with status code $statusCode");
             }
-            if ($statusCode === 400) {
-                return Response::validation($response->getContent(false));
-            }
-            if ($statusCode === 204 || $statusCode === 404) {
-                return Response::nothing();
-            }
-            throw new ClientException("$method $url failed with status code $statusCode");
         } catch (TransportExceptionInterface | HttpExceptionInterface $e) {
             throw new ClientException("$method $url failed with exception", $e);
         }

@@ -3,7 +3,7 @@
 namespace App\Security;
 
 use App\Client\ApiClient;
-use App\Client\UserClient;
+use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
@@ -17,13 +17,13 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 class ApiAuthenticator extends AbstractLoginFormAuthenticator
 {
     private ApiClient $apiClient;
-    private UserClient $userClient;
+    private UserManager $userManager;
     private RouterInterface $router;
 
-    public function __construct(ApiClient $apiClient, UserClient $userClient, RouterInterface $router)
+    public function __construct(ApiClient $apiClient, UserManager $userManager, RouterInterface $router)
     {
         $this->apiClient = $apiClient;
-        $this->userClient = $userClient;
+        $this->userManager = $userManager;
         $this->router = $router;
     }
 
@@ -43,15 +43,15 @@ class ApiAuthenticator extends AbstractLoginFormAuthenticator
             $email = $request->request->get('email');
             $password = $request->request->get('password');
             if ($this->apiClient->authorize($email, $password)) {
-                $response = $this->userClient->getByEmail($email);
-                return new SelfValidatingPassport(new User($email, $response->getContent()['roles']));
+                $user = $this->userManager->getByEmail($email);
+                return new SelfValidatingPassport(new User($user->email, $user->roles));
             }
             throw new BadCredentialsException();
         }
         if ($this->apiClient->isAuthorized()) {
             $email = $this->apiClient->getAuthorizedEmail();
-            $response = $this->userClient->getByEmail($email);
-            return new SelfValidatingPassport(new User($email, $response->getContent()['roles']));
+            $user = $this->userManager->getByEmail($email);
+            return new SelfValidatingPassport(new User($user->email, $user->roles));
         }
         throw new CustomUserMessageAuthenticationException('Authentication required.');
     }

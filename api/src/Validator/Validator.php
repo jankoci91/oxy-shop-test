@@ -40,7 +40,7 @@ class Validator implements ValidatorInterface
                 $validationGroups = $validationGroups($data);
             }
 
-            if (!$validationGroups instanceof GroupSequence) {
+            if (! $validationGroups instanceof GroupSequence) {
                 $validationGroups = (array) $validationGroups;
             }
         }

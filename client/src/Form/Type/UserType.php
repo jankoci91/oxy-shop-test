@@ -9,7 +9,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserType extends AbstractType
 {
@@ -23,8 +22,12 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add(User::NAME, TextType::class)
-            ->add(User::EMAIL, TextType::class)
+            ->add(User::NAME, TextType::class, [
+                'required' => false,
+            ])
+            ->add(User::EMAIL, TextType::class, [
+                'required' => false,
+            ])
             ->add(User::PASSWORD, PasswordType::class, [
                 'required' => false,
             ])
@@ -33,10 +36,5 @@ class UserType extends AbstractType
                 'multiple' => true,
                 'required' => false,
             ]);
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefault('action', '#');
     }
 }

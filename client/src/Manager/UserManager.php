@@ -25,14 +25,13 @@ class UserManager
     public function getAll(): array
     {
         $response = $this->client->getAll();
+        $users = [];
         if ($response->isData()) {
-            $users = [];
             foreach ($response->getContent() as $array) {
                 $users[] = $this->mapper->arrayToDto((array) $array);
             }
-            return $users;
         }
-        return [];
+        return $users;
     }
 
     public function getById(int $id): ?User
@@ -53,16 +52,28 @@ class UserManager
         return null;
     }
 
-    public function save(User $user): User
+    public function save(User $user): array
     {
         if ($user->id) {
             $response = $this->client->patch($user->id, $user->name, $user->email, $user->password, $user->roles);
         } else {
             $response = $this->client->post($user->name, $user->email, $user->password, $user->roles);
         }
-        if ($response->isData()) {
-            return $this->mapper->arrayToDto($response->getContent());
+        if ($response->isValidation()) {
+            return $response->getContent();
         }
-        throw new \LogicException('todo: validation');
+        if ($response->isData()) {
+            $this->mapper->arrayToDto($response->getContent(), $user);
+            return [];
+        }
+        throw new ManagerException('Unable to save user');
+    }
+
+    public function delete(int $id): void
+    {
+        $response = $this->client->delete($id);
+        if (! $response->isData()) {
+            throw new ManagerException("Unable to delete user #$id");
+        }
     }
 }

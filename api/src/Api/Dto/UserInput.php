@@ -9,15 +9,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UserInput
 {
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      * @Assert\Length(min=2, max=180)
      */
     public $name;
     /**
-     * @var string
-     *
      * @see \App\Api\UserInputTransformer::transform with additional constraints
      *
      * @Assert\NotBlank()
@@ -26,16 +22,12 @@ class UserInput
      */
     public $email;
     /**
-     * @var string
-     *
      * @see \App\Api\UserInputTransformer::transform with additional constraints
      *
      * @Assert\Length(min=5)
      */
     public $password;
     /**
-     * @var array
-     *
      * @Assert\Choice(multiple=true, choices=UserEntity::ALL_ROLES)
      */
     public $roles;

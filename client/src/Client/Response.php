@@ -6,7 +6,7 @@ class Response
 {
     private const TYPE_DATA = 1;
     private const TYPE_VALIDATION = 2;
-    private const TYPE_NOTHING = 3;
+    private const TYPE_NO_DATA = 3;
 
     private array $content;
     private int $type;
@@ -21,9 +21,9 @@ class Response
         return new self($content, self::TYPE_VALIDATION);
     }
 
-    public static function nothing(): self
+    public static function noData(): self
     {
-        return new self('', self::TYPE_NOTHING);
+        return new self('', self::TYPE_NO_DATA);
     }
 
     private function __construct(string $content, int $type)
@@ -45,10 +45,5 @@ class Response
     public function isValidation()
     {
         return $this->type === self::TYPE_VALIDATION;
-    }
-
-    public function isNothing()
-    {
-        return $this->type === self::TYPE_NOTHING;
     }
 }

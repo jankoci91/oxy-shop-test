@@ -40,7 +40,7 @@ class UserClient
         return $response;
     }
 
-    public function post(string $name, string $email, string $password, array $roles): Response
+    public function post(?string $name, ?string $email, ?string $password, ?array $roles): Response
     {
         return $this->client->post($this->userEndpoint, [
             'name' => $name,
@@ -50,7 +50,7 @@ class UserClient
         ]);
     }
 
-    public function patch(int $id, string $name, string $email, ?string $password, array $roles): Response
+    public function patch(int $id, ?string $name, ?string $email, ?string $password, ?array $roles): Response
     {
         $body = [
             'name' => $name,

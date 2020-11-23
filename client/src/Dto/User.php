@@ -4,6 +4,7 @@ namespace App\Dto;
 
 class User
 {
+    public const ID = 'id';
     public const NAME = 'name';
     public const EMAIL = 'email';
     public const PASSWORD = 'password';
