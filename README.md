@@ -12,6 +12,8 @@
 
 ## Run
 
+Username: admin@local.host Password: docker
+
 - `docker-compose up -d client`
 
 - http://localhost:8080
