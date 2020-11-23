@@ -26,9 +26,18 @@ class UserClient
         return $this->client->get($this->userEndpoint);
     }
 
-    public function getOne(int $id): Response
+    public function getById(int $id): Response
     {
         return $this->client->get("$this->userEndpoint/{$id}");
+    }
+
+    public function getByEmail(string $email): Response
+    {
+        $response = $this->client->get("$this->userEndpoint/?email=$email");
+        if ($response->isData()) {
+            return Response::data(json_encode($response->getContent()[0]));
+        }
+        return $response;
     }
 
     public function post(string $name, string $email, string $password, array $roles): Response

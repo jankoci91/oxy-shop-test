@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block style %}
+.split {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.left {
+    left: 0;
+}
+
+.right {
+    right: 0;
+}
+
+th, td {
+    border: 1px solid #d3d3d3;
+}
+
+table {
+    width: 100%;
+}
+{% endblock style %}
+
+{% block body %}
+    <div class="split left">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>E-mail</th>
+                    <th>Roles</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td><a href="{{ path('users', {'id': user.id }) }}">{{ user.id }}</a></td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.roles|join(', ') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="split right">
+        {% form_theme userForm 'form_table_layout.html.twig' %}
+        {{ form_start(userForm) }}
+        {{ form_widget(userForm) }}
+        <button type="submit">Save</button>
+        {{ form_end(userForm) }}
+    </div>
+{% endblock body %}

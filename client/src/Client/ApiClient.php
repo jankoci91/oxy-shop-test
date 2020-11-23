@@ -22,6 +22,14 @@ class ApiClient
         $this->session = $session;
     }
 
+    public function getAuthorizedEmail(): string
+    {
+        if ($this->isAuthorized()) {
+            return $this->getEmail();
+        }
+        throw new ClientException('Unauthorized');
+    }
+
     public function isAuthorized(): bool
     {
         if (empty($this->getToken())) {
@@ -36,6 +44,7 @@ class ApiClient
             $authorized = $this->client->request('GET', $this->host, $options)->getStatusCode() === 200;
             if (!$authorized) {
                 $this->setToken('');
+                $this->setEmail('');
             }
             return $authorized;
         } catch (TransportExceptionInterface $e) {
@@ -65,11 +74,13 @@ class ApiClient
             $content = json_decode($response->getContent(false));
             if (isset($content->token)) {
                 $this->setToken($content->token);
+                $this->setEmail($email);
                 return true;
             }
         }
         if ($statusCode === 401) {
             $this->setToken('');
+            $this->setEmail('');
             return false;
         }
         throw new ClientException("Authorization failed with status code $statusCode");
@@ -126,11 +137,21 @@ class ApiClient
 
     private function setToken(string $token): void
     {
-        $this->session->set('api-token', $token);
+        $this->session->set('api-auth-token', $token);
     }
 
     private function getToken(): string
     {
-        return $this->session->get('api-token', '');
+        return $this->session->get('api-auth-token', '');
+    }
+
+    private function setEmail(string $email): void
+    {
+        $this->session->set('api-auth-email', $email);
+    }
+
+    private function getEmail(): string
+    {
+        return $this->session->get('api-auth-email', '');
     }
 }

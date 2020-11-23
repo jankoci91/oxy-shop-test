@@ -3,3 +3,6 @@ resources:
         attributes:
             input: App\Api\Dto\UserInput
             output: App\Api\Dto\UserOutput
+        collectionOperations:
+            get:
+                filters: [ 'user_email_filter' ]

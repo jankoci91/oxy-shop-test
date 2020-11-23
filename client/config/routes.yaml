@@ -3,19 +3,16 @@ homepage:
     controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
     methods: GET
     defaults:
-        route: login
+        route: users
 
 login:
     path: /login
     controller: App\Controller\LoginController
     methods: GET|POST
 
-registration:
-    path: /registration
-    controller: App\Controller\RegistrationController
-    methods: GET|POST
-
 users:
-    path: /users
-    controller: App\Controller\RegistrationController
+    path: /users/{id}
+    controller: App\Controller\UserController
     methods: GET|POST
+    defaults:
+        id: null
